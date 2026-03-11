@@ -2,17 +2,18 @@
 
 /* ========== CSS VARIABLES ========== */
 :root {
-  --color-bg: #0c0a09;
-  --color-bg-elevated: #1c1917;
-  --color-surface: #292524;
-  --color-amber: #d97706;
-  --color-amber-light: #f59e0b;
-  --color-amber-glow: rgba(217, 119, 6, 0.15);
-  --color-gold: #ca8a04;
-  --color-text: #e7e5e4;
-  --color-text-muted: #a8a29e;
-  --color-text-dim: #78716c;
-  --grain-opacity: 0.04;
+  --color-bg: #080c08;
+  --color-bg-elevated: #0f1a0f;
+  --color-surface: #142014;
+  --color-accent: #4ade80;
+  --color-accent-light: #86efac;
+  --color-accent-glow: rgba(74, 222, 128, 0.15);
+  --color-muted: #4a7a5a;
+  --color-muted-dim: #2d5a3d;
+  --color-text: #d0e0d4;
+  --color-text-muted: #7a9a84;
+  --color-text-dim: #3d5a44;
+  --scroll-progress: 0;
 }
 
 /* ========== BASE ========== */
@@ -29,74 +30,103 @@ body {
 }
 
 ::selection {
-  background-color: rgba(217, 119, 6, 0.3);
-  color: #fef3c7;
+  background-color: rgba(74, 222, 128, 0.25);
+  color: #e0f5e8;
 }
 
-/* ========== GRAIN OVERLAY ========== */
-.grain::before {
-  content: "";
+/* ========== VIGNETTE — soft earth edges ========== */
+.vignette {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 3;
   pointer-events: none;
-  opacity: var(--grain-opacity);
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
+  background:
+    radial-gradient(
+      ellipse at 50% 50%,
+      transparent 30%,
+      rgba(6, 10, 6, 0.35) 55%,
+      rgba(4, 8, 4, 0.65) 75%,
+      rgba(2, 5, 2, 0.85) 100%
+    );
 }
 
-/* ========== ATMOSPHERIC VIGNETTE ========== */
-.vignette::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse at 50% 50%,
-    transparent 50%,
-    rgba(12, 10, 9, 0.6) 100%
-  );
-}
-
-/* ========== WARM LIGHT WASH ========== */
-.light-wash {
-  position: fixed;
-  top: -30%;
-  left: -10%;
+/* ========== GREEN GLOW — bioluminescent light ========== */
+.bio-glow-primary {
+  position: absolute;
+  top: -15%;
+  left: -5%;
   width: 70%;
   height: 70%;
   background: radial-gradient(
-    ellipse at center,
-    rgba(217, 119, 6, 0.06) 0%,
-    transparent 70%
+    ellipse at 35% 30%,
+    rgba(74, 222, 128, 0.08) 0%,
+    rgba(34, 197, 94, 0.03) 35%,
+    transparent 60%
   );
-  pointer-events: none;
-  z-index: 0;
+  mix-blend-mode: screen;
+}
+
+.bio-glow-secondary {
+  position: absolute;
+  bottom: -10%;
+  right: -5%;
+  width: 55%;
+  height: 55%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(22, 163, 74, 0.06) 0%,
+    transparent 55%
+  );
+  mix-blend-mode: screen;
+}
+
+.bio-glow-accent {
+  position: absolute;
+  top: 40%;
+  right: 15%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle at center,
+    rgba(45, 180, 140, 0.07) 0%,
+    rgba(34, 197, 94, 0.02) 40%,
+    transparent 65%
+  );
+  filter: blur(20px);
+  mix-blend-mode: screen;
+}
+
+/* ========== REDUCED MOTION ========== */
+@media (prefers-reduced-motion: reduce) {
+  .fade-up {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* ========== SECTION STYLES ========== */
 .section-heading {
   font-family: var(--font-display), "Cormorant Garamond", Georgia, serif;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   font-size: 0.75rem;
-  color: var(--color-amber);
+  color: var(--color-muted);
 }
 
 .section-divider {
   width: 3rem;
   height: 1px;
-  background: linear-gradient(to right, var(--color-amber), transparent);
+  background: linear-gradient(to right, var(--color-muted-dim), transparent);
 }
 
 /* ========== SCROLL ANIMATIONS ========== */
 .fade-up {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .fade-up.visible {
@@ -106,13 +136,13 @@ body {
 
 /* stagger children */
 .stagger > .fade-up:nth-child(1) { transition-delay: 0ms; }
-.stagger > .fade-up:nth-child(2) { transition-delay: 80ms; }
-.stagger > .fade-up:nth-child(3) { transition-delay: 160ms; }
-.stagger > .fade-up:nth-child(4) { transition-delay: 240ms; }
-.stagger > .fade-up:nth-child(5) { transition-delay: 320ms; }
-.stagger > .fade-up:nth-child(6) { transition-delay: 400ms; }
-.stagger > .fade-up:nth-child(7) { transition-delay: 480ms; }
-.stagger > .fade-up:nth-child(8) { transition-delay: 560ms; }
+.stagger > .fade-up:nth-child(2) { transition-delay: 100ms; }
+.stagger > .fade-up:nth-child(3) { transition-delay: 200ms; }
+.stagger > .fade-up:nth-child(4) { transition-delay: 300ms; }
+.stagger > .fade-up:nth-child(5) { transition-delay: 400ms; }
+.stagger > .fade-up:nth-child(6) { transition-delay: 500ms; }
+.stagger > .fade-up:nth-child(7) { transition-delay: 600ms; }
+.stagger > .fade-up:nth-child(8) { transition-delay: 700ms; }
 
 /* ========== SHELF SCROLL ========== */
 .shelf-scroll {
@@ -151,7 +181,7 @@ body {
 }
 
 .cover-card:hover .cover-img {
-  box-shadow: 0 0 24px rgba(217, 119, 6, 0.2), 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.12), 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .cover-img {
@@ -195,20 +225,20 @@ body {
 
 .photo-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 20px rgba(217, 119, 6, 0.12);
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.08);
 }
 
 /* ========== LINK HOVER ========== */
-.amber-link {
+.green-link {
   color: var(--color-text);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.amber-link:hover {
-  color: var(--color-amber-light);
-  border-bottom-color: var(--color-amber);
+.green-link:hover {
+  color: var(--color-accent-light);
+  border-bottom-color: var(--color-accent);
 }
 
 /* ========== SOCIAL ICON ========== */
@@ -218,7 +248,7 @@ body {
 }
 
 .social-icon:hover {
-  color: var(--color-amber-light);
+  color: var(--color-accent-light);
   transform: translateY(-2px);
 }
 

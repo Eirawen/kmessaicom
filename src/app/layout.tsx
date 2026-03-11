@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Source_Sans_3 } from "next/font/google";
+import { ParallaxProvider } from "@/components/atmosphere/ParallaxProvider";
+import { PaintCanvas } from "@/components/atmosphere/PaintCanvas";
+import { SwirlingCanvas } from "@/components/atmosphere/SwirlingCanvas";
+import { ChiaroscuroLight } from "@/components/atmosphere/ChiaroscuroLight";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -39,10 +43,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${cormorant.variable} ${sourceSans.variable}`}>
-      <body className={`${sourceSans.className} grain`}>
-        <div className="vignette" />
-        <div className="light-wash" />
-        <main className="relative z-10">{children}</main>
+      <body className={sourceSans.className}>
+        <ParallaxProvider>
+          <PaintCanvas />
+          <SwirlingCanvas />
+          <ChiaroscuroLight />
+          <div className="vignette" />
+          <main className="relative z-10">{children}</main>
+        </ParallaxProvider>
       </body>
     </html>
   );

@@ -31,13 +31,13 @@ export function Shelf({
                   loading="lazy"
                 />
               ) : (
-                <div className="cover-img flex items-center justify-center border border-stone-700/50">
-                  <span className="text-stone-500 text-xs text-center px-2 font-medium">
+                <div className="cover-img flex items-center justify-center border border-slate-700/30">
+                  <span className="text-slate-500 text-xs text-center px-2 font-medium">
                     {item.title}
                   </span>
                 </div>
               )}
-              <p className="mt-2 text-xs text-stone-400 leading-tight truncate">
+              <p className="mt-2 text-xs text-slate-400 leading-tight truncate">
                 {item.title}
               </p>
             </div>
