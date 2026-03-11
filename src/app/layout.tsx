@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Source_Sans_3 } from "next/font/google";
 import { ParallaxProvider } from "@/components/atmosphere/ParallaxProvider";
-import { PaintCanvas } from "@/components/atmosphere/PaintCanvas";
-import { SwirlingCanvas } from "@/components/atmosphere/SwirlingCanvas";
-import { ChiaroscuroLight } from "@/components/atmosphere/ChiaroscuroLight";
+import { StarField } from "@/components/atmosphere/StarField";
+import { SceneLayer } from "@/components/atmosphere/SceneLayer";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -45,11 +44,17 @@ export default function RootLayout({
     <html lang="en" className={`${cormorant.variable} ${sourceSans.variable}`}>
       <body className={sourceSans.className}>
         <ParallaxProvider>
-          <PaintCanvas />
-          <SwirlingCanvas />
-          <ChiaroscuroLight />
-          <div className="vignette" />
-          <main className="relative z-10">{children}</main>
+          {/* Scene — all layers in one fixed container at z-index 0 */}
+          <div style={{ position: "fixed", inset: "0", zIndex: 0, pointerEvents: "none" }}>
+            <StarField />
+            <SceneLayer src="/scene/moon.png" speed={0.008} className="scene-moon" />
+            <SceneLayer src="/scene/trees-left.png" speed={0.015} className="scene-trees-left" />
+            <SceneLayer src="/scene/trees-right.png" speed={0.015} className="scene-trees-right" />
+            <SceneLayer src="/scene/khaled-phos-cliff.png" speed={0.02} className="scene-characters" />
+          </div>
+
+          {/* Content — above the scene */}
+          <main style={{ position: "relative", zIndex: 1 }}>{children}</main>
         </ParallaxProvider>
       </body>
     </html>

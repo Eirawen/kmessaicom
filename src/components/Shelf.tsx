@@ -9,19 +9,24 @@ type ShelfItem = {
 
 export function Shelf({
   label,
+  description,
   items,
 }: {
   label: string;
+  description: string;
   items: ShelfItem[];
 }) {
   return (
-    <div className="mb-12">
+    <div className="mb-16">
       <ScrollReveal>
-        <h3 className="section-heading mb-4">{label}</h3>
+        <h3 className="section-heading mb-2">{label}</h3>
+        <p className="text-sm text-slate-400 leading-relaxed mb-6 max-w-lg">
+          {description}
+        </p>
       </ScrollReveal>
       <ScrollReveal stagger>
-        <div className="shelf-scroll">
-          {items.map((item, i) => (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          {items.slice(0, 5).map((item, i) => (
             <div key={i} className="cover-card fade-up">
               {item.cover ? (
                 <img

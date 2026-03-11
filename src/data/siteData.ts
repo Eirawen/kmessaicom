@@ -57,39 +57,48 @@ export const siteData = {
   ],
 
   // --- FAVORITES ---
+  favoritesIntro: "Things that have notably changed me. I care deeply for each of these.",
   favorites: {
-    books: [
-      { title: "Book One", cover: null },
-      { title: "Book Two", cover: null },
-      { title: "Book Three", cover: null },
-      { title: "Book Four", cover: null },
-      { title: "Book Five", cover: null },
-      { title: "Book Six", cover: null },
-    ],
-    games: [
-      { title: "Game One", cover: null },
-      { title: "Game Two", cover: null },
-      { title: "Game Three", cover: null },
-      { title: "Game Four", cover: null },
-      { title: "Game Five", cover: null },
-      { title: "Game Six", cover: null },
-    ],
-    albums: [
-      { title: "Album One", cover: null },
-      { title: "Album Two", cover: null },
-      { title: "Album Three", cover: null },
-      { title: "Album Four", cover: null },
-      { title: "Album Five", cover: null },
-      { title: "Album Six", cover: null },
-    ],
-    anime: [
-      { title: "Anime One", cover: null },
-      { title: "Anime Two", cover: null },
-      { title: "Anime Three", cover: null },
-      { title: "Anime Four", cover: null },
-      { title: "Anime Five", cover: null },
-      { title: "Anime Six", cover: null },
-    ],
+    books: {
+      description: "Placeholder — what do these books mean to you?",
+      items: [
+        { title: "Book One", cover: null },
+        { title: "Book Two", cover: null },
+        { title: "Book Three", cover: null },
+        { title: "Book Four", cover: null },
+        { title: "Book Five", cover: null },
+      ],
+    },
+    games: {
+      description: "Placeholder — what do these games mean to you?",
+      items: [
+        { title: "Game One", cover: null },
+        { title: "Game Two", cover: null },
+        { title: "Game Three", cover: null },
+        { title: "Game Four", cover: null },
+        { title: "Game Five", cover: null },
+      ],
+    },
+    albums: {
+      description: "Placeholder — what does this music mean to you?",
+      items: [
+        { title: "Album One", cover: null },
+        { title: "Album Two", cover: null },
+        { title: "Album Three", cover: null },
+        { title: "Album Four", cover: null },
+        { title: "Album Five", cover: null },
+      ],
+    },
+    anime: {
+      description: "Placeholder — what does this anime/manga mean to you?",
+      items: [
+        { title: "Anime One", cover: null },
+        { title: "Anime Two", cover: null },
+        { title: "Anime Three", cover: null },
+        { title: "Anime Four", cover: null },
+        { title: "Anime Five", cover: null },
+      ],
+    },
   },
 
   // --- PHOTOS ---

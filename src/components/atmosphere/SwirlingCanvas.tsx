@@ -59,7 +59,7 @@ export function SwirlingCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const sporeCount = isMobile ? 25 : 60;
+    const sporeCount = isMobile ? 15 : 35;
     const spores = createSpores(w, h, sporeCount);
 
     let lastFrame = 0;
