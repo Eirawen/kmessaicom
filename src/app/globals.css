@@ -1,0 +1,230 @@
+@import "tailwindcss";
+
+/* ========== CSS VARIABLES ========== */
+:root {
+  --color-bg: #0c0a09;
+  --color-bg-elevated: #1c1917;
+  --color-surface: #292524;
+  --color-amber: #d97706;
+  --color-amber-light: #f59e0b;
+  --color-amber-glow: rgba(217, 119, 6, 0.15);
+  --color-gold: #ca8a04;
+  --color-text: #e7e5e4;
+  --color-text-muted: #a8a29e;
+  --color-text-dim: #78716c;
+  --grain-opacity: 0.04;
+}
+
+/* ========== BASE ========== */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+body {
+  font-family: var(--font-body), "Source Sans 3", system-ui, sans-serif;
+  background-color: var(--color-bg);
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: rgba(217, 119, 6, 0.3);
+  color: #fef3c7;
+}
+
+/* ========== GRAIN OVERLAY ========== */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ========== ATMOSPHERIC VIGNETTE ========== */
+.vignette::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    transparent 50%,
+    rgba(12, 10, 9, 0.6) 100%
+  );
+}
+
+/* ========== WARM LIGHT WASH ========== */
+.light-wash {
+  position: fixed;
+  top: -30%;
+  left: -10%;
+  width: 70%;
+  height: 70%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(217, 119, 6, 0.06) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========== SECTION STYLES ========== */
+.section-heading {
+  font-family: var(--font-display), "Cormorant Garamond", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: var(--color-amber);
+}
+
+.section-divider {
+  width: 3rem;
+  height: 1px;
+  background: linear-gradient(to right, var(--color-amber), transparent);
+}
+
+/* ========== SCROLL ANIMATIONS ========== */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* stagger children */
+.stagger > .fade-up:nth-child(1) { transition-delay: 0ms; }
+.stagger > .fade-up:nth-child(2) { transition-delay: 80ms; }
+.stagger > .fade-up:nth-child(3) { transition-delay: 160ms; }
+.stagger > .fade-up:nth-child(4) { transition-delay: 240ms; }
+.stagger > .fade-up:nth-child(5) { transition-delay: 320ms; }
+.stagger > .fade-up:nth-child(6) { transition-delay: 400ms; }
+.stagger > .fade-up:nth-child(7) { transition-delay: 480ms; }
+.stagger > .fade-up:nth-child(8) { transition-delay: 560ms; }
+
+/* ========== SHELF SCROLL ========== */
+.shelf-scroll {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.shelf-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.shelf-scroll::-webkit-scrollbar-track {
+  background: var(--color-bg-elevated);
+  border-radius: 2px;
+}
+
+.shelf-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-text-dim);
+  border-radius: 2px;
+}
+
+/* ========== COVER CARD ========== */
+.cover-card {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  width: 140px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cover-card:hover {
+  transform: scale(1.04) translateY(-4px);
+}
+
+.cover-card:hover .cover-img {
+  box-shadow: 0 0 24px rgba(217, 119, 6, 0.2), 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.cover-img {
+  width: 140px;
+  height: 200px;
+  border-radius: 4px;
+  object-fit: cover;
+  background: var(--color-surface);
+  transition: box-shadow 0.3s ease;
+}
+
+/* ========== MASONRY-LIKE PHOTO GRID ========== */
+.photo-grid {
+  columns: 2;
+  column-gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .photo-grid {
+    columns: 3;
+  }
+}
+
+@media (min-width: 1024px) {
+  .photo-grid {
+    columns: 4;
+  }
+}
+
+.photo-grid > * {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+}
+
+.photo-item {
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--color-surface);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.photo-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(217, 119, 6, 0.12);
+}
+
+/* ========== LINK HOVER ========== */
+.amber-link {
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.amber-link:hover {
+  color: var(--color-amber-light);
+  border-bottom-color: var(--color-amber);
+}
+
+/* ========== SOCIAL ICON ========== */
+.social-icon {
+  color: var(--color-text-muted);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.social-icon:hover {
+  color: var(--color-amber-light);
+  transform: translateY(-2px);
+}
+
+/* ========== TAILWIND LAYER OVERRIDES ========== */
+@layer base {
+  h1, h2, h3, h4 {
+    font-family: var(--font-display), "Cormorant Garamond", Georgia, serif;
+  }
+}
