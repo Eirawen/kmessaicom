@@ -7,6 +7,7 @@ import { SceneLayer } from "@/components/atmosphere/SceneLayer";
 import { CelestialMoon } from "@/components/atmosphere/CelestialMoon";
 import { CelestialSun } from "@/components/atmosphere/CelestialSun";
 import { WaterLayer } from "@/components/atmosphere/WaterLayer";
+import { FishingRipples } from "@/components/atmosphere/FishingRipples";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -58,6 +59,7 @@ export default function RootLayout({
             <SceneLayer src="/Favorites/Site Assets/fulltreenobg.png" speed={0.02} className="scene-treeline" />
             <CelestialSun />
             <WaterLayer />
+            <FishingRipples />
             <SceneLayer src="/Favorites/Site Assets/phoskhaledcolored_isnet.png" speed={0.04} className="scene-characters" />
           </div>
 

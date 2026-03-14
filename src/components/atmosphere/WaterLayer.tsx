@@ -234,12 +234,6 @@ export function WaterLayer() {
         />
       </div>
 
-      {/* Fishing line ripples */}
-      <div className="water-ripple-origin">
-        <div className="water-ripple" style={{ animationDelay: "0s" }} />
-        <div className="water-ripple" style={{ animationDelay: "1.7s" }} />
-        <div className="water-ripple" style={{ animationDelay: "3.3s" }} />
-      </div>
     </div>
   );
 }
