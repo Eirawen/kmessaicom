@@ -47,15 +47,21 @@ export function WaterLayer() {
       stars.push({ sx, sy, size, brightness });
     }
 
+    // Only reflect stars in the bottom 60% of the sky
+    const skyThreshold = waterlineY * 0.4;
+
     const drawReflections = (time: number) => {
       ctx.clearRect(0, 0, w, waterHeight);
 
       for (const star of stars) {
-        // Reflection Y in water canvas (0 = waterline at top of canvas)
+        // Skip stars too high — they'd be too faint in real water
+        if (star.sy < skyThreshold) continue;
+
+        // Mirror Y across waterline into water canvas coords
         const reflY = waterlineY - star.sy;
         if (reflY < 0 || reflY > waterHeight) continue;
 
-        // Wobble derived from position, NOT rand() — preserves RNG sync
+        // Horizontal wobble derived from position (not rand)
         const wobbleAmp = 0.5 + (star.sx % 3) * 0.3;
         const wobblePeriod = 3000 + ((star.sx * 1000) % 3000);
         const wobbleX =
@@ -63,16 +69,26 @@ export function WaterLayer() {
             ? 0
             : Math.sin((time / wobblePeriod) * Math.PI * 2) * wobbleAmp;
 
-        const alpha = star.brightness * 0.35;
-        const elongHeight = star.size * 1.8;
+        // Per-star shimmer/twinkle (3-6s cycle)
+        const shimmerPeriod =
+          3000 + (((star.sx * 997 + star.sy * 991) | 0) % 3000);
+        const shimmer =
+          isMobile || prefersReducedMotion
+            ? 1
+            : 0.6 + 0.4 * Math.sin((time / shimmerPeriod) * Math.PI * 2);
+
+        const alpha = star.brightness * 0.4 * shimmer;
 
         ctx.fillStyle = `rgba(180, 200, 215, ${alpha})`;
-        ctx.fillRect(
-          star.sx + wobbleX - 0.5,
-          reflY - elongHeight / 2,
-          1,
-          elongHeight
+        ctx.beginPath();
+        ctx.ellipse(
+          star.sx + wobbleX,
+          reflY,
+          star.size,
+          star.size * 1.75,
+          0, 0, Math.PI * 2
         );
+        ctx.fill();
       }
     };
 
