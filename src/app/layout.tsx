@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Source_Sans_3 } from "next/font/google";
 import { ParallaxProvider } from "@/components/atmosphere/ParallaxProvider";
 import { StarField } from "@/components/atmosphere/StarField";
 import { SceneLayer } from "@/components/atmosphere/SceneLayer";
+import { WaterLayer } from "@/components/atmosphere/WaterLayer";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -50,6 +51,7 @@ export default function RootLayout({
             <SceneLayer src="/scene/moon.png" speed={0.008} className="scene-moon" />
             <SceneLayer src="/scene/trees-left.png" speed={0.015} className="scene-trees-left" />
             <SceneLayer src="/scene/trees-right.png" speed={0.015} className="scene-trees-right" />
+            <WaterLayer />
             <SceneLayer src="/scene/khaled-phos-cliff.png" speed={0.02} className="scene-characters" />
           </div>
 

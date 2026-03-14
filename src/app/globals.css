@@ -105,6 +105,115 @@ body {
   }
 }
 
+/* ========== WATER LAYER ========== */
+.water-surface {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 38vh;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 0%, #060a0f 10%);
+}
+
+.water-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(180, 200, 215, 0.015) 0px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
+
+.water-moon-reflection {
+  position: absolute;
+  top: 12%;
+  left: 8%;
+  width: 140px;
+  height: 180px;
+  opacity: 0.45;
+  filter: url(#water-distortion) blur(1px);
+  will-change: filter;
+}
+
+.water-ripple-origin {
+  position: absolute;
+  top: 4%;
+  right: 18%;
+  width: 0;
+  height: 0;
+}
+
+.water-ripple {
+  position: absolute;
+  width: 60px;
+  height: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.3);
+  animation: ripple-expand 5s ease-out infinite;
+}
+
+@keyframes ripple-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 0.08;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .water-surface {
+    height: 32vh;
+  }
+
+  .water-moon-reflection {
+    width: 80px;
+    height: 100px;
+    left: 5%;
+    top: 10%;
+    filter: blur(1px);
+  }
+
+  .water-ripple {
+    width: 40px;
+    height: 14px;
+  }
+
+  .water-ripple-origin {
+    right: 15%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .water-moon-reflection {
+    width: 180px;
+    height: 230px;
+    left: 12%;
+  }
+
+  .water-ripple {
+    width: 80px;
+    height: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .water-ripple {
+    animation: none;
+    opacity: 0.04;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+}
+
 /* ========== REDUCED MOTION ========== */
 @media (prefers-reduced-motion: reduce) {
   .fade-up {
