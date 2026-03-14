@@ -127,6 +127,8 @@ Everything in the scene is understated. When adding visual effects:
 - Stars twinkle: 3–6 second cycles (slow, meditative)
 - Moon distortion: 10 second seed cycle (glacial)
 - Ripples: 5 second expand cycle, staggered
+- Sun rotation: 72 seconds per full turn (imperceptibly slow)
+- Sun glow breathing: 2–3.2 second layered sine cycles
 - Nothing pulses fast. Nothing blinks. The scene breathes.
 
 ---

@@ -26,7 +26,8 @@ The scene is built from layered PNG assets, not procedural generation (except st
 
 **Layer order (back to front)**:
 1. Star canvas — 120 seeded stars in upper 65% of viewport, twinkling
-2. Moon — phosphophyllite crescent, top-left, slowest parallax
+2. Sun canvas — pinkSun.png with glow corona, scroll-driven bezier arc
+3. Moon — phosphophyllite crescent, top-left, slowest parallax
 3. Side trees — decorative framing, left and right edges
 4. Treeline — full-width horizon silhouette at the sky/water boundary
 5. Water surface — gradient fade, star reflections, moon distortion, fishing ripples
@@ -46,6 +47,30 @@ The character image is positioned at `bottom: 0; right: 0` with no offset. The P
 ## Content Structure
 
 Content is centralized in `src/data/siteData.ts`, not scattered across components. This makes it easy to update text without touching component code. The page is a single scroll: Hero → Now → Past → Writing → Favorites → Photos → Footer.
+
+## CelestialSun — Living PNG on Canvas
+
+The sun uses `pinkSun.png` drawn on a `<canvas>` rather than as a static `<img>` or pure gradient. This gives us the actual artwork as the sun's visual identity while enabling per-frame animation.
+
+**Rendering stack (back to front on the 500×500 canvas):**
+1. Outer corona — radial gradient glow (warm pink/peach), breathes with layered sine pulses
+2. Mid glow — tighter radial gradient body, breathes on a slightly different cycle
+3. Sun PNG — `pinkSun.png` drawn with `ctx.drawImage()`, animated transforms
+4. Ghost layer — a single slightly-larger, slightly-rotated copy of the PNG at 15% opacity, creating soft wavy edges on the ray tips
+
+**Animation parameters (deliberately slow — the user is sensitive to motion):**
+- Rotation: one full turn every **72 seconds** + ±1.5° wobble on a 5s sine
+- Scale pulse: ±1.2% on a 3s sine — barely perceptible breathing
+- Ghost layer: ±0.04 radian rotation offset on a 2s sine, 4% larger, 15% alpha
+- No alpha shimmer on the main layer — held at 0.95
+
+**Scroll behavior:**
+- Invisible below 45% scroll progress, fades in between 45–60%, fully visible above 60%
+- Follows a quadratic bezier arc across the viewport (bottom-left → top-center → upper-right)
+- Wrapper scale grows from 1.0→1.8 as scroll progresses
+- Shares position via `sunPosition` global for WaterLayer reflection
+
+**Key design principle:** When the user says "slow it down," they mean it. The sun went through three speed halvings (18s → 36s → 72s per rotation) before feeling right. Always err on the side of glacially slow for this site's aesthetic.
 
 ## Reduced Motion
 

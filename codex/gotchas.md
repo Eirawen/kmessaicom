@@ -22,6 +22,10 @@ Wobble/shimmer parameters are derived from star positions (`star.sx * 997 + star
 
 The treeline uses `object-fit: cover !important` (overriding SceneLayer's default) because it needs to stretch full-width edge-to-edge without letterboxing.
 
+## CelestialSun animation speed
+
+The sun rotation was halved three times during development (18s → 36s → 72s) because even moderate rotation caused motion sickness. **Do not speed up sun animations without explicit user approval.** The ghost layer (wavy ray tips) must also stay subtle — 15% opacity, single layer only. Two ghost layers looked "psychedelic."
+
 ## .next cache corruption
 
 If you `rm -rf .next` while a dev server is running on any port, you'll get `ENOENT: fallback-build-manifest.json` errors. **Always kill all `next dev` processes first** (`pkill -f "next dev"`), then clear the cache.
@@ -34,7 +38,8 @@ Components marked `"use client"` still get server-side rendered for initial HTML
 
 DOM order in the scene container determines visual stacking (no z-index needed). The current order matters:
 1. StarField (back)
-2. Moon
+2. CelestialSun
+3. Moon
 3. Side trees
 4. Treeline
 5. WaterLayer (water surface, reflections)

@@ -11,6 +11,7 @@ All scene PNGs are transparent-background images composited over the dark site b
 | Trees (right) | `/scene/trees-right.png` | — | Decorative framing, bottom-right |
 | Treeline | `/Favorites/Site Assets/fulltreenobg.png` | — | Full-width horizon silhouette. Hourglass shape (thinner in center) — positioned slightly low (`bottom: 34%`) to hide the center gap |
 | Characters | `/Favorites/Site Assets/phoskhaledcliffpng.png` | 1534x1205 | Khaled & Phos on cliff. Right and bottom edges are flat/trimmed for flush corner placement |
+| Sun | `/Favorites/Site Assets/pinkSun.png` | — | Pink/warm sun artwork, drawn on canvas by CelestialSun component with glow corona behind it |
 | Cliff (unused) | `/scene/cliff.png` | — | Older standalone cliff asset, superseded by combined character image |
 | Characters alt (unused) | `/scene/khaled-phos.png` | — | Older character image without cliff |
 | Characters alt (unused) | `/scene/khaled-phos-cliff.png` | 1645x1205 | Older combined image with right-side blank space |

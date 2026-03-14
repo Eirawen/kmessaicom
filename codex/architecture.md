@@ -15,6 +15,7 @@
     <ParallaxProvider>
       <div fixed inset-0 z-0>   ← Scene (background, not interactive)
         <StarField />            ← Canvas: 120 twinkling stars
+        <CelestialSun />         ← Canvas: PNG sun texture with glow corona, scroll-driven arc
         <SceneLayer moon />      ← Parallax image layers
         <SceneLayer trees-left />
         <SceneLayer trees-right />
@@ -44,6 +45,7 @@ src/
     atmosphere/       ← Scene rendering
       ParallaxProvider.tsx  ← Scroll listener, applies transforms via data-parallax-speed
       StarField.tsx         ← Seeded RNG star canvas with twinkle animation
+      CelestialSun.tsx      ← Canvas sun: PNG texture + radial glow corona + scroll arc
       WaterLayer.tsx        ← Star reflections, moon reflection, fishing ripples
       SceneLayer.tsx        ← Generic parallax image wrapper
     ScrollReveal.tsx  ← IntersectionObserver fade-in

@@ -117,18 +117,30 @@ export function CelestialSun() {
       ctx.fillStyle = midGrad;
       ctx.fillRect(0, 0, size, size);
 
-      // Sun PNG texture — drawn with breathing, wobble, and shimmer
+      // Sun PNG texture — slow rotation, gentle breath, wavy ray edges
       if (sunImg.complete && sunImg.naturalWidth > 0) {
         const imgSize = 120 + scrollT * 30;
-        const scalePulse = 1 + 0.035 * Math.sin(time / 2000 * Math.PI * 2) + 0.025 * Math.sin(time / 3200 * Math.PI * 2 + 1.2);
-        const rotationWobble = (Math.PI / 120) * Math.sin(time / 5000 * Math.PI * 2);
-        const alphaShimmer = 0.88 + 0.12 * Math.sin(time / 1200 * Math.PI * 2);
+        const scalePulse = 1 + 0.012 * Math.sin(time / 3000 * Math.PI * 2);
+        // Very gentle spin + subtle wobble
+        const baseRotation = time / 72000 * Math.PI * 2;
+        const wobble = (Math.PI / 60) * Math.sin(time / 5000 * Math.PI * 2);
+        const rotation = baseRotation + wobble;
 
+        // Main sun layer
         ctx.save();
         ctx.translate(cx, cy);
-        ctx.rotate(rotationWobble);
+        ctx.rotate(rotation);
         ctx.scale(scalePulse, scalePulse);
-        ctx.globalAlpha = alphaShimmer;
+        ctx.globalAlpha = 0.95;
+        ctx.drawImage(sunImg, -imgSize / 2, -imgSize / 2, imgSize, imgSize);
+        ctx.restore();
+
+        // Single ghost layer — soft wavy edge on ray tips
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(rotation + Math.sin(time / 2000 * Math.PI * 2) * 0.04);
+        ctx.scale(scalePulse * 1.04, scalePulse * 1.04);
+        ctx.globalAlpha = 0.15;
         ctx.drawImage(sunImg, -imgSize / 2, -imgSize / 2, imgSize, imgSize);
         ctx.restore();
       } else {
