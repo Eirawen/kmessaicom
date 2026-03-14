@@ -51,9 +51,9 @@ export default function RootLayout({
             <SceneLayer src="/scene/moon.png" speed={0.008} className="scene-moon" />
             <SceneLayer src="/scene/trees-left.png" speed={0.015} className="scene-trees-left" />
             <SceneLayer src="/scene/trees-right.png" speed={0.015} className="scene-trees-right" />
-            <SceneLayer src="/Favorites/Site Assets/fulltreenobg.png" speed={0.01} className="scene-treeline" />
+            <SceneLayer src="/Favorites/Site Assets/fulltreenobg.png" speed={0.02} className="scene-treeline" />
             <WaterLayer />
-            <SceneLayer src="/Favorites/Site Assets/phoskhaledcliffpng.png" speed={0.02} className="scene-characters" />
+            <SceneLayer src="/Favorites/Site Assets/phoskhaledcliffpng.png" speed={0.04} className="scene-characters" />
           </div>
 
           {/* Content — above the scene */}
