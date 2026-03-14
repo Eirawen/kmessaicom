@@ -9,7 +9,8 @@ function quadBezier(p0: number, p1: number, p2: number, t: number) {
 }
 
 export function CelestialSun() {
-  const ref = useRef<HTMLDivElement>(null);
+  const sunRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const isMobile = "ontouchstart" in window;
@@ -17,13 +18,14 @@ export function CelestialSun() {
     if (isMobile || prefersReduced) return;
 
     return subscribeToScroll((progress) => {
-      if (!ref.current) return;
+      if (!sunRef.current || !glowRef.current) return;
 
       // Sun arc: progress 0.45→1.0 maps to bezier t 0→1
       let opacity: number;
       if (progress < 0.45) {
         opacity = 0;
-        ref.current.style.opacity = "0";
+        sunRef.current.style.opacity = "0";
+        glowRef.current.style.opacity = "0";
         sunPosition.opacity = 0;
         return;
       }
@@ -36,14 +38,24 @@ export function CelestialSun() {
       if (progress < 0.6) opacity = (progress - 0.45) / 0.15;
       else opacity = 1;
 
-      ref.current.style.left = `${x}%`;
-      ref.current.style.top = `${y}%`;
-      ref.current.style.opacity = String(opacity);
+      // Sun grows to emit light — scale from 1× to 1.8× as it rises
+      const scale = 1 + t * 0.8;
 
-      // Warm glow intensifies with progress
-      const glowIntensity = opacity * 0.6;
-      const spread = 20 + t * 40;
-      ref.current.style.boxShadow = `0 0 ${spread}px ${spread * 0.6}px rgba(202, 118, 158, ${glowIntensity})`;
+      // Sharp sun
+      sunRef.current.style.left = `${x}%`;
+      sunRef.current.style.top = `${y}%`;
+      sunRef.current.style.opacity = String(opacity);
+      sunRef.current.style.transform = `translate3d(0, 0, 0) scale(${scale})`;
+
+      // Glow — blurred duplicate, much larger, same position
+      const glowScale = scale * 2.8;
+      const glowBlur = 30 + t * 30;
+      const glowOpacity = opacity * (0.45 + t * 0.25);
+      glowRef.current.style.left = `${x}%`;
+      glowRef.current.style.top = `${y}%`;
+      glowRef.current.style.opacity = String(glowOpacity);
+      glowRef.current.style.transform = `translate3d(0, 0, 0) scale(${glowScale})`;
+      glowRef.current.style.filter = `blur(${glowBlur}px) saturate(1.3)`;
 
       // Write to shared state for WaterLayer
       sunPosition.x = x;
@@ -53,26 +65,49 @@ export function CelestialSun() {
   }, []);
 
   return (
-    <div
-      ref={ref}
-      className="absolute pointer-events-none"
-      style={{
-        top: "55%",
-        left: "5%",
-        width: 120,
-        height: 120,
-        opacity: 0,
-        borderRadius: "50%",
-        willChange: "transform, opacity",
-      }}
-      aria-hidden="true"
-    >
-      <img
-        src="/Favorites/Site Assets/pinkSun.png"
-        alt=""
-        draggable={false}
-        style={{ width: "100%", height: "100%", objectFit: "contain" }}
-      />
-    </div>
+    <>
+      {/* Glow — separate element, behind the sun, no clipping container */}
+      <div
+        ref={glowRef}
+        className="absolute pointer-events-none"
+        style={{
+          top: "55%",
+          left: "5%",
+          width: 120,
+          height: 120,
+          opacity: 0,
+          willChange: "transform, filter, opacity",
+        }}
+        aria-hidden="true"
+      >
+        <img
+          src="/Favorites/Site Assets/pinkSun.png"
+          alt=""
+          draggable={false}
+          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+        />
+      </div>
+      {/* Sharp sun — on top */}
+      <div
+        ref={sunRef}
+        className="absolute pointer-events-none"
+        style={{
+          top: "55%",
+          left: "5%",
+          width: 120,
+          height: 120,
+          opacity: 0,
+          willChange: "transform, opacity",
+        }}
+        aria-hidden="true"
+      >
+        <img
+          src="/Favorites/Site Assets/pinkSun.png"
+          alt=""
+          draggable={false}
+          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+        />
+      </div>
+    </>
   );
 }
