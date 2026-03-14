@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Source_Sans_3 } from "next/font/google";
 import { ParallaxProvider } from "@/components/atmosphere/ParallaxProvider";
+import { SkyGradient } from "@/components/atmosphere/SkyGradient";
 import { StarField } from "@/components/atmosphere/StarField";
 import { SceneLayer } from "@/components/atmosphere/SceneLayer";
+import { CelestialMoon } from "@/components/atmosphere/CelestialMoon";
+import { CelestialSun } from "@/components/atmosphere/CelestialSun";
 import { WaterLayer } from "@/components/atmosphere/WaterLayer";
 import "./globals.css";
 
@@ -47,11 +50,13 @@ export default function RootLayout({
         <ParallaxProvider>
           {/* Scene — all layers in one fixed container at z-index 0 */}
           <div style={{ position: "fixed", inset: "0", zIndex: 0, pointerEvents: "none" }}>
+            <SkyGradient />
             <StarField />
-            <SceneLayer src="/scene/moon.png" speed={0.008} className="scene-moon" />
+            <CelestialMoon />
             <SceneLayer src="/scene/trees-left.png" speed={0.015} className="scene-trees-left" />
             <SceneLayer src="/scene/trees-right.png" speed={0.015} className="scene-trees-right" />
             <SceneLayer src="/Favorites/Site Assets/fulltreenobg.png" speed={0.02} className="scene-treeline" />
+            <CelestialSun />
             <WaterLayer />
             <SceneLayer src="/Favorites/Site Assets/phoskhaledcliffpng.png" speed={0.04} className="scene-characters" />
           </div>

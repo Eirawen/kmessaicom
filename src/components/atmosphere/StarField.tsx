@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { scrollProgress } from "./scrollProgress";
 
 export function StarField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -45,12 +46,17 @@ export function StarField() {
     }
 
     const drawStars = (time: number) => {
+      const p = scrollProgress.current;
+      const starFade = p < 0.3 ? 1 : p > 0.6 ? 0 : 1 - (p - 0.3) / 0.3;
+
       ctx.clearRect(0, 0, w, h);
+      if (starFade === 0) return;
+
       for (const star of stars) {
         const twinkle = prefersReducedMotion
           ? 1
           : 0.7 + 0.3 * Math.sin((time / star.twinklePeriod) * Math.PI * 2);
-        const alpha = star.brightness * twinkle;
+        const alpha = star.brightness * twinkle * starFade;
 
         ctx.fillStyle = `rgba(200, 210, 220, ${alpha})`;
         ctx.beginPath();

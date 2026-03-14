@@ -35,14 +35,6 @@ body {
 }
 
 /* ========== SCENE LAYERS ========== */
-.scene-moon {
-  top: 6%;
-  left: 8%;
-  width: 140px;
-  height: 180px;
-  opacity: 0.9;
-}
-
 .scene-trees-left {
   bottom: 0;
   left: 0;
@@ -78,13 +70,6 @@ body {
 }
 
 @media (max-width: 768px) {
-  .scene-moon {
-    width: 80px;
-    height: 100px;
-    top: 4%;
-    left: 5%;
-  }
-
   .scene-characters {
     width: 220px;
     height: 170px;
@@ -104,12 +89,6 @@ body {
 }
 
 @media (min-width: 1280px) {
-  .scene-moon {
-    width: 180px;
-    height: 230px;
-    left: 12%;
-  }
-
   .scene-characters {
     width: 480px;
     height: 380px;
@@ -136,7 +115,7 @@ body {
   inset: 0;
   background: repeating-linear-gradient(
     to bottom,
-    rgba(180, 200, 215, 0.015) 0px,
+    var(--water-line-color, rgba(180, 200, 215, 0.015)) 0px,
     transparent 1px,
     transparent 3px
   );
@@ -151,6 +130,17 @@ body {
   height: 180px;
   opacity: 0.45;
   filter: url(#water-distortion) blur(1px);
+  will-change: filter;
+}
+
+.water-sun-reflection {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  width: 120px;
+  height: 120px;
+  opacity: 0;
+  filter: url(#water-distortion) blur(1.5px);
   will-change: filter;
 }
 
@@ -196,6 +186,11 @@ body {
     filter: blur(1px);
   }
 
+  .water-sun-reflection {
+    width: 70px;
+    height: 70px;
+  }
+
   .water-ripple {
     width: 40px;
     height: 14px;
@@ -211,6 +206,11 @@ body {
     width: 180px;
     height: 230px;
     left: 12%;
+  }
+
+  .water-sun-reflection {
+    width: 150px;
+    height: 150px;
   }
 
   .water-ripple {

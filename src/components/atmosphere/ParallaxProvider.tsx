@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
+import { notifySubscribers } from "./scrollProgress";
 
 export function ParallaxProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
@@ -19,6 +20,7 @@ export function ParallaxProvider({ children }: { children: ReactNode }) {
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         const progress = docHeight > 0 ? scrollY / docHeight : 0;
         document.body.style.setProperty("--scroll-progress", String(progress));
+        notifySubscribers(progress);
 
         const els = document.querySelectorAll<HTMLElement>("[data-parallax-speed]");
         for (let i = 0; i < els.length; i++) {

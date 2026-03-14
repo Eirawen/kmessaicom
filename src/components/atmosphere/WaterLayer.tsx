@@ -1,9 +1,29 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { scrollProgress, moonPosition, sunPosition } from "./scrollProgress";
+import { multiStopLerp, rgbString, type RGB } from "@/lib/colorUtils";
+
+const reflectionColorStops: [number, RGB][] = [
+  [0.0, [180, 200, 215]],
+  [0.35, [180, 200, 215]],
+  [0.5, [160, 150, 210]],
+  [0.7, [200, 140, 170]],
+  [1.0, [220, 170, 140]],
+];
+
+const waterBgStops: [number, RGB][] = [
+  [0.0, [5, 8, 16]],
+  [0.5, [18, 8, 24]],
+  [0.7, [26, 16, 21]],
+  [1.0, [26, 20, 18]],
+];
 
 export function WaterLayer() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const surfaceRef = useRef<HTMLDivElement>(null);
+  const moonReflRef = useRef<HTMLDivElement>(null);
+  const sunReflRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -51,7 +71,13 @@ export function WaterLayer() {
     const skyThreshold = waterlineY * 0.4;
 
     const drawReflections = (time: number) => {
+      const p = scrollProgress.current;
+      // Star reflections fade slightly ahead of sky stars
+      const starFade = p < 0.25 ? 1 : p > 0.55 ? 0 : 1 - (p - 0.25) / 0.3;
+      const reflColor = multiStopLerp(reflectionColorStops, p);
+
       ctx.clearRect(0, 0, w, waterHeight);
+      if (starFade === 0) return;
 
       for (const star of stars) {
         // Skip stars too high — they'd be too faint in real water
@@ -77,9 +103,9 @@ export function WaterLayer() {
             ? 1
             : 0.6 + 0.4 * Math.sin((time / shimmerPeriod) * Math.PI * 2);
 
-        const alpha = star.brightness * 0.55 * shimmer;
+        const alpha = star.brightness * 0.55 * shimmer * starFade;
 
-        ctx.fillStyle = `rgba(180, 200, 215, ${alpha})`;
+        ctx.fillStyle = rgbString(reflColor, alpha);
         ctx.beginPath();
         ctx.ellipse(
           star.sx + wobbleX,
@@ -89,6 +115,33 @@ export function WaterLayer() {
           0, 0, Math.PI * 2
         );
         ctx.fill();
+      }
+    };
+
+    // Update water surface color and reflections based on scroll
+    const updateWaterStyle = () => {
+      const p = scrollProgress.current;
+
+      // Water surface background color
+      if (surfaceRef.current) {
+        const bgColor = multiStopLerp(waterBgStops, p);
+        surfaceRef.current.style.background = `linear-gradient(to bottom, transparent 0%, ${rgbString(bgColor)} 10%)`;
+
+        // Water line color via CSS variable
+        const lineColor = multiStopLerp(reflectionColorStops, p);
+        surfaceRef.current.style.setProperty("--water-line-color", rgbString(lineColor, 0.015));
+      }
+
+      // Moon reflection tracking
+      if (moonReflRef.current) {
+        moonReflRef.current.style.left = `${moonPosition.x}%`;
+        moonReflRef.current.style.opacity = String(Math.min(moonPosition.opacity * 0.5, 0.45));
+      }
+
+      // Sun reflection tracking
+      if (sunReflRef.current) {
+        sunReflRef.current.style.left = `${sunPosition.x}%`;
+        sunReflRef.current.style.opacity = String(sunPosition.opacity * 0.35);
       }
     };
 
@@ -106,6 +159,7 @@ export function WaterLayer() {
     const animate = (time: number) => {
       if (time - lastFrame >= frameInterval) {
         drawReflections(time);
+        updateWaterStyle();
         lastFrame = time;
       }
       animId = requestAnimationFrame(animate);
@@ -116,11 +170,11 @@ export function WaterLayer() {
   }, []);
 
   return (
-    <div className="water-surface" data-parallax-speed={0.02} aria-hidden="true">
+    <div ref={surfaceRef} className="water-surface" data-parallax-speed={0.02} aria-hidden="true">
       {/* Star reflections canvas */}
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
 
-      {/* SVG filter for moon distortion — GPU-composited, zero JS */}
+      {/* SVG filter for moon/sun distortion — GPU-composited, zero JS */}
       <svg className="absolute" width="0" height="0" aria-hidden="true">
         <defs>
           <filter id="water-distortion" x="-10%" y="-10%" width="120%" height="120%">
@@ -151,9 +205,24 @@ export function WaterLayer() {
       </svg>
 
       {/* Flipped moon with water distortion */}
-      <div className="water-moon-reflection">
+      <div ref={moonReflRef} className="water-moon-reflection">
         <img
           src="/scene/moon.png"
+          alt=""
+          draggable={false}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            transform: "scaleY(-1)",
+          }}
+        />
+      </div>
+
+      {/* Flipped sun with water distortion */}
+      <div ref={sunReflRef} className="water-sun-reflection">
+        <img
+          src="/Favorites/Site Assets/pinkSun.png"
           alt=""
           draggable={false}
           style={{
