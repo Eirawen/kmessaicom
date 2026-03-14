@@ -77,7 +77,7 @@ export function WaterLayer() {
             ? 1
             : 0.6 + 0.4 * Math.sin((time / shimmerPeriod) * Math.PI * 2);
 
-        const alpha = star.brightness * 0.4 * shimmer;
+        const alpha = star.brightness * 0.55 * shimmer;
 
         ctx.fillStyle = `rgba(180, 200, 215, ${alpha})`;
         ctx.beginPath();
@@ -126,7 +126,7 @@ export function WaterLayer() {
           <filter id="water-distortion" x="-10%" y="-10%" width="120%" height="120%">
             <feTurbulence
               type="fractalNoise"
-              baseFrequency="0.012 0.035"
+              baseFrequency="0.008 0.024"
               numOctaves={3}
               result="noise"
             >
@@ -141,7 +141,7 @@ export function WaterLayer() {
             <feDisplacementMap
               in="SourceGraphic"
               in2="noise"
-              scale={14}
+              scale={9}
               xChannelSelector="R"
               yChannelSelector="G"
             />

@@ -2,16 +2,16 @@
 
 import { useEffect, useRef } from "react";
 
-/**
- * Faint, static star field on a transparent canvas.
- * Just dots — no animation, no noise. Understated.
- */
 export function StarField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const w = window.innerWidth;
@@ -33,17 +33,51 @@ export function StarField() {
     };
 
     const starCount = 120;
+    const stars: { x: number; y: number; size: number; brightness: number; twinklePeriod: number }[] = [];
     for (let i = 0; i < starCount; i++) {
       const x = rand() * w;
-      const y = rand() * h * 0.65; // stars mostly in upper 2/3
+      const y = rand() * h * 0.65;
       const size = 0.5 + rand() * 1.2;
       const brightness = 0.15 + rand() * 0.35;
-
-      ctx.fillStyle = `rgba(200, 210, 220, ${brightness})`;
-      ctx.beginPath();
-      ctx.arc(x, y, size, 0, Math.PI * 2);
-      ctx.fill();
+      // Twinkle period derived from position (3-6s), same approach as water reflections
+      const twinklePeriod = 3000 + (((x * 997 + y * 991) | 0) % 3000);
+      stars.push({ x, y, size, brightness, twinklePeriod });
     }
+
+    const drawStars = (time: number) => {
+      ctx.clearRect(0, 0, w, h);
+      for (const star of stars) {
+        const twinkle = prefersReducedMotion
+          ? 1
+          : 0.7 + 0.3 * Math.sin((time / star.twinklePeriod) * Math.PI * 2);
+        const alpha = star.brightness * twinkle;
+
+        ctx.fillStyle = `rgba(200, 210, 220, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    };
+
+    if (prefersReducedMotion) {
+      drawStars(0);
+      return;
+    }
+
+    let animId: number;
+    let lastFrame = 0;
+    const frameInterval = 1000 / 30;
+
+    const animate = (time: number) => {
+      if (time - lastFrame >= frameInterval) {
+        drawStars(time);
+        lastFrame = time;
+      }
+      animId = requestAnimationFrame(animate);
+    };
+    animId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animId);
   }, []);
 
   return (

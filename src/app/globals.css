@@ -57,9 +57,22 @@ body {
   height: 18%;
 }
 
+.scene-treeline {
+  bottom: 36%;
+  left: 0;
+  width: 100%;
+  height: 12%;
+  opacity: 0.85;
+}
+
+.scene-treeline img {
+  object-fit: cover !important;
+  object-position: bottom center;
+}
+
 .scene-characters {
-  bottom: 4%;
-  right: 5%;
+  bottom: 0;
+  right: 0;
   width: 380px;
   height: 300px;
 }
@@ -75,8 +88,8 @@ body {
   .scene-characters {
     width: 220px;
     height: 170px;
-    bottom: 3%;
-    right: 3%;
+    bottom: 0;
+    right: 0;
   }
 
   .scene-trees-left {
@@ -100,8 +113,8 @@ body {
   .scene-characters {
     width: 480px;
     height: 380px;
-    right: 8%;
-    bottom: 4%;
+    right: 0;
+    bottom: 0;
   }
 }
 
@@ -114,7 +127,7 @@ body {
   height: 38vh;
   overflow: hidden;
   pointer-events: none;
-  background: linear-gradient(to bottom, transparent 0%, #060a0f 10%);
+  background: linear-gradient(to bottom, transparent 0%, #050810 10%);
 }
 
 .water-surface::before {
