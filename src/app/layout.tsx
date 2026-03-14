@@ -58,7 +58,7 @@ export default function RootLayout({
             <SceneLayer src="/Favorites/Site Assets/fulltreenobg.png" speed={0.02} className="scene-treeline" />
             <CelestialSun />
             <WaterLayer />
-            <SceneLayer src="/Favorites/Site Assets/phoskhaledcliffpng.png" speed={0.04} className="scene-characters" />
+            <SceneLayer src="/Favorites/Site Assets/phoskhaledcolored_isnet.png" speed={0.04} className="scene-characters" />
           </div>
 
           {/* Content — above the scene */}
