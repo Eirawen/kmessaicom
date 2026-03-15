@@ -36,7 +36,7 @@ export function Shelf({
                   loading="lazy"
                 />
               ) : (
-                <div className="cover-img flex items-center justify-center border border-slate-700/30">
+                <div className="cover-img flex items-center justify-center">
                   <span className="text-slate-500 text-xs text-center px-2 font-medium">
                     {item.title}
                   </span>
