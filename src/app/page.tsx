@@ -38,8 +38,8 @@ export default function Home() {
         </ScrollReveal>
       </section>
 
-      {/* ==================== NOW ==================== */}
-      <section className="px-6 sm:px-12 md:px-16 lg:px-24 max-w-2xl py-28">
+      {/* ==================== NOW & PRIOR ==================== */}
+      <section className="px-6 sm:px-12 md:px-16 lg:px-24 max-w-3xl py-28">
         <GlassPanel>
           <ScrollReveal>
             <p className="section-heading mb-2">Now</p>
@@ -52,16 +52,11 @@ export default function Home() {
             <p className="text-sm text-slate-400 font-medium uppercase tracking-wider mb-6">
               {siteData.now.subtitle}
             </p>
-            <p className="text-slate-400 leading-relaxed max-w-xl text-base">
+            <p className="text-slate-400 leading-relaxed max-w-xl text-base mb-16">
               {siteData.now.description}
             </p>
           </ScrollReveal>
-        </GlassPanel>
-      </section>
 
-      {/* ==================== PAST ==================== */}
-      <section className="px-6 sm:px-12 md:px-16 lg:px-24 max-w-2xl py-28">
-        <GlassPanel>
           <ScrollReveal>
             <p className="section-heading mb-2">Prior</p>
             <div className="section-divider mb-10" />
@@ -77,25 +72,6 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          </ScrollReveal>
-        </GlassPanel>
-      </section>
-
-      {/* ==================== WRITING ==================== */}
-      <section className="px-6 sm:px-12 md:px-16 lg:px-24 max-w-2xl py-28">
-        <GlassPanel>
-          <ScrollReveal>
-            <p className="section-heading mb-2">Writing</p>
-            <div className="section-divider mb-6" />
-            <a
-              href={siteData.socials.substack}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-slate-400 hover:text-[var(--color-accent)] transition-colors text-base"
-            >
-              Read on Substack
-              <span aria-hidden="true">&rarr;</span>
-            </a>
           </ScrollReveal>
         </GlassPanel>
       </section>
@@ -150,18 +126,6 @@ export default function Home() {
           </ScrollReveal>
         </GlassPanel>
       </section>
-
-      {/* ==================== FOOTER ==================== */}
-      <footer className="px-6 sm:px-12 md:px-16 lg:px-24 max-w-2xl py-16">
-        <GlassPanel intensity="subtle">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            <p className="text-slate-600 text-sm">
-              {siteData.name}
-            </p>
-            <SocialIcons size={18} />
-          </div>
-        </GlassPanel>
-      </footer>
     </div>
   );
 }

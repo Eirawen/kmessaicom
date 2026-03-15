@@ -42,6 +42,14 @@ export function GlassPanel({
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!ref.current) return;
+
+    // Randomize shimmer start point (client-only to avoid hydration mismatch)
+    ref.current.style.setProperty(
+      "--shimmer-delay",
+      `${Math.random() * -12}s`
+    );
+
     const isMobile = "ontouchstart" in window;
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -60,7 +68,10 @@ export function GlassPanel({
   }, [intensity]);
 
   return (
-    <div ref={ref} className={`glass-panel glass-${intensity} ${className}`}>
+    <div
+      ref={ref}
+      className={`glass-panel glass-${intensity} ${className}`}
+    >
       {children}
     </div>
   );

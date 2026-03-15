@@ -271,12 +271,58 @@ body {
 
 /* ========== GLASS PANELS ========== */
 .glass-panel {
-  border-radius: 16px;
+  position: relative;
+  isolation: isolate;
+  border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 1.5rem 1.25rem;
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    0 0 0 0.5px rgba(255, 255, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Inner gradient — brighter at top (catching ambient light), darker at bottom */
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.035),
+    transparent 50%,
+    rgba(0, 0, 0, 0.04)
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Slow light shimmer sweeping across the surface */
+.glass-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.02) 44%,
+    rgba(255, 255, 255, 0.04) 50%,
+    rgba(255, 255, 255, 0.02) 56%,
+    transparent 60%
+  );
+  background-size: 250% 100%;
+  animation: glass-shimmer 12s linear infinite;
+  animation-delay: var(--shimmer-delay, 0s);
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes glass-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .glass-normal {
@@ -301,6 +347,12 @@ body {
   .glass-normal { background-color: rgba(6, 6, 12, 0.55); }
   .glass-subtle { background-color: rgba(6, 6, 12, 0.45); }
   .glass-strong { background-color: rgba(6, 6, 12, 0.65); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-panel::after {
+    animation: none;
+  }
 }
 
 @media (min-width: 640px) {
