@@ -60,7 +60,7 @@ export default function RootLayout({
             <CelestialSun />
             <WaterLayer />
             <FishingRipples />
-            <SceneLayer src="/Favorites/Site Assets/phoskhaledcolored_isnet.png" speed={0.04} className="scene-characters" />
+            <SceneLayer src="/Favorites/Site Assets/phoskhaledcolored_isnet.png" speed={0.03} className="scene-characters" />
           </div>
 
           {/* Content — above the scene */}

@@ -13,10 +13,14 @@ const reflectionColorStops: [number, RGB][] = [
 ];
 
 const waterBgStops: [number, RGB][] = [
-  [0.0, [5, 8, 16]],
-  [0.5, [18, 8, 24]],
-  [0.7, [26, 16, 21]],
-  [1.0, [26, 20, 18]],
+  [0.0, [4, 10, 20]],     // deep dark teal-navy — ties to moon #76caa2
+  [0.3, [4, 10, 20]],     // hold dark through night
+  [0.4, [14, 22, 46]],    // dark teal-indigo (sky: [42,31,78])
+  [0.5, [32, 42, 82]],    // dark blue (sky: [134,118,202] — clearly darker, bluer)
+  [0.6, [42, 38, 62]],    // dark muted blue (sky: [158,107,138])
+  [0.7, [38, 32, 46]],    // dark cool (sky: [196,120,138])
+  [0.85, [34, 28, 34]],   // dark neutral
+  [1.0, [30, 26, 28]],    // dark warm-neutral (sky: [245,193,123] — water stays deep)
 ];
 
 export function WaterLayer() {
@@ -125,7 +129,7 @@ export function WaterLayer() {
       // Water surface background color
       if (surfaceRef.current) {
         const bgColor = multiStopLerp(waterBgStops, p);
-        surfaceRef.current.style.background = `linear-gradient(to bottom, transparent 0%, ${rgbString(bgColor)} 10%)`;
+        surfaceRef.current.style.background = `linear-gradient(to bottom, transparent 0%, ${rgbString(bgColor, 0.15)} 8%, ${rgbString(bgColor, 0.45)} 22%, ${rgbString(bgColor, 0.75)} 42%, ${rgbString(bgColor)} 68%)`;
 
         // Water line color via CSS variable
         const lineColor = multiStopLerp(reflectionColorStops, p);
@@ -145,10 +149,41 @@ export function WaterLayer() {
       }
     };
 
+    // Click-to-ripple — listen on document since the scene container
+    // has pointer-events:none and main content sits above at z-index 1
+    const surface = surfaceRef.current!;
+
+    const handleClick = (e: MouseEvent) => {
+      // Don't steal clicks from interactive elements
+      if ((e.target as HTMLElement).closest("a, button, input, [role='button']")) return;
+
+      const rect = surface.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      // Only spawn if click lands within the water surface bounds
+      if (x < 0 || x > rect.width || y < 0 || y > rect.height) return;
+
+      const origin = document.createElement("div");
+      origin.style.cssText = `position:absolute;left:${x}px;top:${y}px;width:0;height:0;pointer-events:none`;
+
+      [0, 0.15, 0.35].forEach((delay) => {
+        const ring = document.createElement("div");
+        ring.className = "water-click-ripple";
+        ring.style.animationDelay = `${delay}s`;
+        origin.appendChild(ring);
+      });
+
+      surface.appendChild(origin);
+      setTimeout(() => origin.remove(), 3500);
+    };
+
+    document.addEventListener("click", handleClick);
+
     // Static draw for mobile / reduced motion
     if (isMobile || prefersReducedMotion) {
       drawReflections(0);
-      return;
+      return () => document.removeEventListener("click", handleClick);
     }
 
     // Animated ~30fps on desktop
@@ -166,7 +201,10 @@ export function WaterLayer() {
     };
     animId = requestAnimationFrame(animate);
 
-    return () => cancelAnimationFrame(animId);
+    return () => {
+      cancelAnimationFrame(animId);
+      document.removeEventListener("click", handleClick);
+    };
   }, []);
 
   return (

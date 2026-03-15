@@ -112,6 +112,18 @@ body {
   }
 }
 
+/* Click-to-ripple on water surface */
+.water-click-ripple {
+  position: absolute;
+  width: 80px;
+  height: 24px;
+  border: 1.5px solid rgba(200, 220, 230, 0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.1);
+  animation: fishing-ripple-expand 3s ease-out forwards;
+  pointer-events: none;
+}
+
 @media (max-width: 768px) {
   .scene-characters {
     width: 220px;
@@ -169,7 +181,7 @@ body {
   height: 38vh;
   overflow: hidden;
   pointer-events: none;
-  background: linear-gradient(to bottom, transparent 0%, #050810 10%);
+  background: linear-gradient(to bottom, transparent 0%, rgba(4, 10, 20, 0.15) 8%, rgba(4, 10, 20, 0.45) 22%, rgba(4, 10, 20, 0.75) 42%, rgb(4, 10, 20) 68%);
 }
 
 .water-surface::before {

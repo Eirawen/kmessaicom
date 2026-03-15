@@ -49,7 +49,7 @@ export function FishingRipples() {
     <div
       ref={ref}
       className="fishing-ripples"
-      data-parallax-speed={0.04}
+      data-parallax-speed={0.03}
       aria-hidden="true"
       style={{ "--ripple-intensity": "0" } as React.CSSProperties}
     >
